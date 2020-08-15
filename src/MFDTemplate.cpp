@@ -42,9 +42,6 @@ char *MFDTemplate::ButtonLabel (int bt)
 {
 	auto label = rust_mfd_.ButtonLabel(bt);
 	return (char*)label.data();
-	// The labels for the two buttons used by our MFD mode
-	// static char *label[2] = {"UP", "DN"};
-	// return (bt < 2 ? label[bt] : 0);
 }
 
 

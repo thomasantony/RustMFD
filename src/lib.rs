@@ -28,22 +28,23 @@ mod ffi {
         type RustMFD;
         fn Update(self: &RustMFD, sketchpad: &mut OapiSketchpad, W: u32, H: u32);
         fn ButtonLabel(self: &RustMFD, btn: i32) -> &str;
-        fn ConsumeButton(self: &RustMFD, bt: i32, event: i32);
+        fn ConsumeButton(self: &mut RustMFD, bt: i32, event: i32);
     }
 }
 
 pub struct RustMFD {
+    counter: i32
 }
 impl RustMFD {
     pub fn ButtonLabel(&self, btn: i32) -> &str
     {
-        if btn == 1
+        if btn == 0
         {
-            return "BTN1\0";
+            return "UP\0";
         }
-        else if btn == 2
+        else if btn == 1
         {
-            return "BTN2\0";
+            return "DN\0";
         } else{
             return "\0";
         }
@@ -56,12 +57,18 @@ impl RustMFD {
         let W = W as i32;
         // let a: oapi_sketchpad::TAlign_horizontal;
         sketchpad.SetTextColor (0x00FFFF);
-        sketchpad.Text(W/2-20, H/2, "Hello from RustMFD!!");
+        sketchpad.Text(W/2-30, H/2, "Hello from RustMFD!!");
+        sketchpad.Text(W/2-30, H/2+15, & format!("Counter: {}", self.counter));
         sketchpad.Rectangle (W/4, H/4, (3*W)/4, (3*H)/4);
     }
-    pub fn ConsumeButton(&self, bt: i32, event: i32)
+    pub fn ConsumeButton(&mut self, bt: i32, event: i32)
     {
         ffi::debugLog(& format!("Pressed button {}", bt));
+        if bt == 0 {
+            self.counter += 1;
+        }else if bt == 1{
+            self.counter -= 1;
+        }
     }
 }
 
@@ -70,7 +77,7 @@ pub extern fn InitModule (_h_dll: ffi::HINSTANCE)
 {
     ffi::debugLog("Initializing RustMFD...");
     let mfd_bridge = ffi::MFDBridge{
-        mfd: Box::new(RustMFD{})
+        mfd: Box::new(RustMFD{counter: 0})
     };
     ffi::InitModuleSpec("RustMFD", oapi_consts::OAPI_KEY_T, Box::new(mfd_bridge));
 }
