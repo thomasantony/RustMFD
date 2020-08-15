@@ -77,4 +77,3 @@ bool MFDTemplate::Update (oapi::Sketchpad *skp)
 	return true;
 }
 
-

@@ -12,15 +12,19 @@ void debugLog(rust::Str s)
 static int g_MFDmode; // identifier for new MFD mode
 static char mfdName[256];
 
-static unique_ptr<MFDTemplate> g_MFD;
+static MFDTemplate* g_MFD = nullptr;
 
 int MsgProc(UINT msg, UINT mfd, WPARAM wparam, LPARAM lparam) 
 {
-    if (g_MFD.get() == nullptr)
+    switch (msg)
     {
-        g_MFD = std::unique_ptr<MFDTemplate>(new MFDTemplate(LOWORD(wparam), HIWORD(wparam), (VESSEL *)lparam));
+    case OAPI_MSG_MFD_OPENED:
+        // Our new MFD mode has been selected, so we create the MFD and
+        // return a pointer to it.
+        g_MFD = new MFDTemplate(LOWORD(wparam), HIWORD(wparam), (VESSEL *)lparam);
+        return (int)(g_MFD);
     }
-    return (int)(g_MFD.get());
+    return 0;
 }
 
 typedef int(*msgproc)(UINT, UINT, WPARAM, LPARAM);
