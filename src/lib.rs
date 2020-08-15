@@ -26,6 +26,7 @@ mod ffi {
     }
     extern "Rust" {
         type RustMFD;
+        fn Title(self: &RustMFD) -> &str;
         fn Update(self: &RustMFD, sketchpad: &mut OapiSketchpad, W: u32, H: u32);
         fn ButtonLabel(self: &RustMFD, btn: i32) -> &str;
         fn ConsumeButton(self: &mut RustMFD, bt: i32, event: i32);
@@ -36,17 +37,17 @@ pub struct RustMFD {
     counter: i32
 }
 impl RustMFD {
+    pub fn Title(&self) -> &str
+    {
+        "Counter MFD written in Rust"
+    }
     pub fn ButtonLabel(&self, btn: i32) -> &str
     {
-        if btn == 0
+        match btn 
         {
-            return "UP\0";
-        }
-        else if btn == 1
-        {
-            return "DN\0";
-        } else{
-            return "\0";
+            0 => "UP\0",
+            1 => "DN\0",
+            _ => "\0"
         }
     }
     pub fn Update(&self, sketchpad: &mut ffi::OapiSketchpad, W: u32, H: u32)

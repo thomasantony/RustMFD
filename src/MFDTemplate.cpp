@@ -65,7 +65,9 @@ bool MFDTemplate::ConsumeButton(int bt, int event) {
 // Repaint the MFD
 bool MFDTemplate::Update (oapi::Sketchpad *skp)
 {
-	Title (skp, "MFD Template in Rust");
+	auto title = rust_mfd_.Title();
+	std::string s_title(title.data(), title.length());
+	Title (skp, s_title.c_str());
 	// // Draws the MFD title
 
 	// skp->SetFont (font);
