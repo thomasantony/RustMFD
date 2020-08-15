@@ -16,8 +16,8 @@
 #define ORBITER_MODULE
 #include "windows.h"
 #include "orbitersdk.h"
-
 #include "wrapper.h"
+#include "src/lib.rs.h"
 
 // ==============================================================
 // MFD class implementation

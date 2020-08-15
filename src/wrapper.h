@@ -1,4 +1,5 @@
 #pragma once
+// DO NOT IMPORT lib.rs.h here
 #include "rust/cxx.h"
 #include "orbitersdk.h"
 #include <cstdint>
@@ -9,14 +10,18 @@ using oapi::IVECTOR2;
 using oapi::Pen;
 using std::unique_ptr;
 
+struct RustMFD;
+
 void debugLog(rust::Str);
 
 static int MsgProc(UINT msg, UINT mfd, WPARAM wparam, LPARAM lparam);
 
+enum class TAlignVertical : uint8_t;
+enum class TAlignHorizontal : uint8_t;
+
 struct OapiSketchpad
 {
     oapi::Sketchpad* pad_;
-
     OapiSketchpad(oapi::Sketchpad* pad) : pad_(pad) {}
     /**
 	 * \brief Selects a new font to use.
@@ -54,9 +59,14 @@ struct OapiSketchpad
 	 * \param tav vertical alignment
 	 * \default None.
 	 */
-     void SetTextAlign(oapi::Sketchpad::TAlign_horizontal tah = oapi::Sketchpad::TAlign_horizontal::LEFT, oapi::Sketchpad::TAlign_vertical tav = oapi::Sketchpad::TAlign_vertical::TOP) { pad_->SetTextAlign(tah, tav); }
+	void SetTextAlign(TAlignHorizontal tah, TAlignVertical tav) 
+	{
+		oapi::Sketchpad::TAlign_vertical vert = static_cast<oapi::Sketchpad::TAlign_vertical>(tav);
+		oapi::Sketchpad::TAlign_horizontal horz = static_cast<oapi::Sketchpad::TAlign_horizontal>(tah);
+		pad_->SetTextAlign(horz, vert); 
+	}
 
-     /**
+	 /**
 	 * \brief Set the foreground colour for text output.
 	 * \param col colour description (format: 0xBBGGRR)
 	 * \return Previous colour setting.
@@ -329,7 +339,6 @@ struct OapiSketchpad
 	 */
      HDC GetDC() { return pad_->GetDC(); }
 };
-#include "src/lib.rs.h"
 
 extern "C" RustMFD *create_rust_mfd() noexcept;
 

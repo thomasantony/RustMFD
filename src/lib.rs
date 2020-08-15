@@ -2,6 +2,17 @@ pub mod oapi_consts;
 
 #[cxx::bridge]
 mod ffi {
+    enum TAlignHorizontal {
+        Left,
+        Center,
+        Right
+    }
+    enum TAlignVertical {
+        Top,
+        Baseline,
+        Bottom
+    }
+
     struct MFDButtonMenu {
         line1: String,
         line2: String,
@@ -17,7 +28,7 @@ mod ffi {
         // OapiSketchpad class methods
         fn SetFont(self: &OapiSketchpad, font: &Font);
         fn SetTextColor(self: &mut OapiSketchpad, color: u32) -> u32;
-        // fn SetTextAlign(self: &mut OapiSketchpad, tah: TAlign_horizontal, tav: TAlign_vertical);
+        fn SetTextAlign(self: &mut OapiSketchpad, tah: TAlignHorizontal, tav: TAlignVertical);
         fn Text(self: &mut OapiSketchpad, x: i32, y: i32, str: &str) -> bool;
         fn Rectangle(self: &mut OapiSketchpad, x0: i32, y0: i32, x1: i32, y1: i32);
 
@@ -77,17 +88,17 @@ impl RustMFD {
             _ => "\0"
         }
     }
-    pub fn Update(&self, sketchpad: &mut ffi::OapiSketchpad, W: u32, H: u32)
+    pub fn Update(&self, sketchpad: &mut ffi::OapiSketchpad, w: u32, h: u32)
     {
         // skp->SetFont (font);
-	    // skp->SetTextAlign (oapi::Sketchpad::CENTER, oapi::Sketchpad::BASELINE);	    
-        let H = H as i32;
-        let W = W as i32;
-        // let a: oapi_sketchpad::TAlign_horizontal;
+	    
+        let h = h as i32;
+        let w = w as i32;
+        sketchpad.SetTextAlign (ffi::TAlignHorizontal::Right, ffi::TAlignVertical::Top);
         sketchpad.SetTextColor (0x00FFFF);
-        sketchpad.Text(W/4+5, H/4+5, "Hello from RustMFD!!");
-        sketchpad.Text(W/4+5, H/4+5+15, & format!("Counter: {}", self.counter));
-        sketchpad.Rectangle (W/4, H/4, (3*W)/4, (3*H)/4);
+        sketchpad.Text(w/4+5, h/4+5, "Hello from RustMFD!!");
+        sketchpad.Text(w/4+5, h/4+5+15, & format!("Counter: {}", self.counter));
+        sketchpad.Rectangle (w/4, h/4, (3*w)/4, (3*h)/4);
     }
     pub fn ConsumeButton(&mut self, bt: i32, event: i32)
     {

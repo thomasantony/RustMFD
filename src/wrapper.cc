@@ -1,4 +1,5 @@
 #include "wrapper.h"
+#include "src/lib.rs.h"
 #include <memory>
 #include <cstring>
 
