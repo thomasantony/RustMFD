@@ -94,11 +94,11 @@ impl RustMFD {
 	    
         let h = h as i32;
         let w = w as i32;
-        sketchpad.SetTextAlign (ffi::TAlignHorizontal::Right, ffi::TAlignVertical::Top);
+        sketchpad.SetTextAlign (ffi::TAlignHorizontal::Center, ffi::TAlignVertical::Baseline);
         sketchpad.SetTextColor (0x00FFFF);
-        sketchpad.Text(w/4+5, h/4+5, "Hello from RustMFD!!");
-        sketchpad.Text(w/4+5, h/4+5+15, & format!("Counter: {}", self.counter));
-        sketchpad.Rectangle (w/4, h/4, (3*w)/4, (3*h)/4);
+        sketchpad.Text(w/2, h/2, "Hello from RustMFD!!");
+        sketchpad.Text(w/2, h/2+20, & format!("Counter: {}", self.counter));
+        sketchpad.Rectangle (w/6, h/6, (5*w)/6, (5*h)/6);
     }
     pub fn ConsumeButton(&mut self, bt: i32, event: i32)
     {
