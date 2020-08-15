@@ -10,10 +10,10 @@ mod ffi {
 
         type HINSTANCE;
         type OapiSketchpad;
-        // type Font;
+        type Font;
 
         // OapiSketchpad class methods
-        // fn SetFont(self: &OapiSketchpad, font: UniquePtr<Font>);
+        fn SetFont(self: &OapiSketchpad, font: &Font);
         fn SetTextColor(self: &mut OapiSketchpad, color: u32) -> u32;
         // fn SetTextAlign(self: &mut OapiSketchpad, tah: TAlign_horizontal, tav: TAlign_vertical);
         fn Text(self: &mut OapiSketchpad, x: i32, y: i32, str: &str) -> bool;

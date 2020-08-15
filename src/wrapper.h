@@ -25,9 +25,9 @@ struct OapiSketchpad
 	 * \default None, returns NULL.
 	 * \sa oapi::Font, oapi::GraphicsClient::clbkCreateFont
 	 */
-    void SetFont(unique_ptr<Font> font) const
+    void SetFont(const Font& font) const
     {
-        pad_->SetFont(font.get());
+        pad_->SetFont((Font*)&font);
     }
 
     /**
