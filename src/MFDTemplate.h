@@ -15,7 +15,7 @@
 #pragma once
 
 #include "Orbitersdk.h"
-
+#include "wrapper.h"
 void InitModule(HINSTANCE hDLL);
 void ExitModule(HINSTANCE hDLL);
 

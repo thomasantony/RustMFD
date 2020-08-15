@@ -1,6 +1,6 @@
 #include "wrapper.h"
-// #include "src/lib.rs.h"
 #include "MFDTemplate.h"
+
 
 void debugLog(rust::Str s)
 {
@@ -8,12 +8,14 @@ void debugLog(rust::Str s)
 }
 
 static int g_MFDmode; // identifier for new MFD mode
+static char mfdName[256];
 
-void InitModuleSpec()
+typedef int(*msgproc)(UINT, UINT, WPARAM, LPARAM);
+void InitModuleSpec(rust::Str name, unsigned int key)
 {
-    static char *name = "Rust MFD";   // MFD mode name
+    strcpy_s(mfdName, name.data());
     MFDMODESPECEX spec;
-    spec.name = name;
+    spec.name = mfdName;
     spec.key = OAPI_KEY_T;                // MFD mode selection key
     spec.context = NULL;
     spec.msgproc = MFDTemplate::MsgProc;  // MFD mode callback function

@@ -9,8 +9,9 @@ crate-type = ["cdylib"]
 bench = false
 
 [dependencies]
-cxx = "0.3"
+cxx = {version = "0.3", path="../cxx"}
+winapi = "0.3.9"
 
 
 [build-dependencies]
-cxx-build = "0.3"
+cxx-build = {version = "0.3", path="../cxx/gen/build"}

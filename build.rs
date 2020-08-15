@@ -2,6 +2,7 @@ fn main() {
     cxx_build::bridge("src/lib.rs")
         .file("src/wrapper.cc")
         .file("src/MFDTemplate.cpp")
+        .include(".")
         .include("D:\\code\\Orbitersdk\\include\\")
         .flag_if_supported("-std=c++14")
         .compile("cxxbridge-demo");

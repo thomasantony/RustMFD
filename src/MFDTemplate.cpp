@@ -15,6 +15,7 @@
 #define STRICT
 #define ORBITER_MODULE
 #include "windows.h"
+#include "src/lib.rs.h"
 #include "orbitersdk.h"
 #include "MFDTemplate.h"
 
@@ -87,17 +88,18 @@ int MFDTemplate::ButtonMenu (const MFDBUTTONMENU **menu) const
 bool MFDTemplate::Update (oapi::Sketchpad *skp)
 {
 	Title (skp, "MFD Template");
-	// Draws the MFD title
+	// // Draws the MFD title
 
-	skp->SetFont (font);
-	skp->SetTextAlign (oapi::Sketchpad::CENTER, oapi::Sketchpad::BASELINE);
-	skp->SetTextColor (0x00FFFF);
-	skp->Text (W/2, H/2,"Display area", 12);
-	skp->Rectangle (W/4, H/4, (3*W)/4, (3*H)/4);
+	// skp->SetFont (font);
+	// skp->SetTextAlign (oapi::Sketchpad::CENTER, oapi::Sketchpad::BASELINE);
+	// skp->SetTextColor (0x00FFFF);
+	// skp->Text (W/2, H/2,"Display area", 12);
+	// skp->Rectangle (W/4, H/4, (3*W)/4, (3*H)/4);
 
-	// Add MFD display routines here.
-	// Use the device context (hDC) for Windows GDI paint functions.
-
+	// // Add MFD display routines here.
+	// // Use the device context (hDC) for Windows GDI paint functions.
+	OapiSketchpad sketchpad(skp);
+	UpdateMFD(sketchpad, W, H);
 	return true;
 }
 
