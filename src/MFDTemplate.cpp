@@ -24,9 +24,8 @@
 
 // Constructor
 MFDTemplate::MFDTemplate(DWORD w, DWORD h, VESSEL *vessel)
-	: MFD2(w, h, vessel), rust_mfd_(create_rust_mfd())
+	: MFD2(w, h, vessel), rust_mfd_(* create_rust_mfd())
 {
-	RustMFD *a = create_rust_mfd();
 	font = oapiCreateFont (w/20, true, "Arial", FONT_NORMAL, 450);
 	// Add MFD initialisation here
 }
@@ -41,7 +40,7 @@ MFDTemplate::~MFDTemplate ()
 // Return button labels
 char *MFDTemplate::ButtonLabel (int bt)
 {
-	auto label = rust_mfd_->ButtonLabel(bt);
+	auto label = rust_mfd_.ButtonLabel(bt);
 	return (char*)label.data();
 }
 
@@ -59,20 +58,20 @@ int MFDTemplate::ButtonMenu (const MFDBUTTONMENU **menu) const
 }
 
 bool MFDTemplate::ConsumeButton(int bt, int event) { 
-	rust_mfd_->ConsumeButton(bt, event);
+	rust_mfd_.ConsumeButton(bt, event);
 	return true;
 }
 
 // Repaint the MFD
 bool MFDTemplate::Update (oapi::Sketchpad *skp)
 {
-	// auto title = rust_mfd_.Title();
-	// std::string s_title(title.data(), title.length());
-	// // Draws the MFD title
-	// Title (skp, s_title.c_str());
+	auto title = rust_mfd_.Title();
+	std::string s_title(title.data(), title.length());
+	// Draws the MFD title
+	Title (skp, s_title.c_str());
 
 	OapiSketchpad sketchpad(skp);
-	rust_mfd_->Update(sketchpad, W, H);
+	rust_mfd_.Update(sketchpad, W, H);
 	return true;
 }
 

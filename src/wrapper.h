@@ -348,5 +348,5 @@ public:
 
 protected:
 	oapi::Font *font;
-	RustMFD* rust_mfd_;
+	RustMFD& rust_mfd_;
 };
