@@ -59,18 +59,36 @@ mod ffi {
     extern "Rust" {
         type RustMFD;
         fn Update(self: &RustMFD, sketchpad: &mut OapiSketchpad, W: u32, H: u32);
+        fn ButtonLabel(self: &RustMFD, btn: i32) -> &str;
     }
 }
 
 pub struct RustMFD {
 }
 impl RustMFD {
+    pub fn ButtonLabel(&self, btn: i32) -> &str
+    {
+        if btn == 1
+        {
+            return "BTN1\0";
+        }
+        else if btn == 2
+        {
+            return "BTN2\0";
+        } else{
+            return "\0";
+        }
+    }
     pub fn Update(&self, sketchpad: &mut ffi::OapiSketchpad, W: u32, H: u32)
     {
+        // skp->SetFont (font);
+	    // skp->SetTextAlign (oapi::Sketchpad::CENTER, oapi::Sketchpad::BASELINE);	    
         let H = H as i32;
         let W = W as i32;
         // let a: oapi_sketchpad::TAlign_horizontal;
+        sketchpad.SetTextColor (0x00FFFF);
         sketchpad.Text(W/2-20, H/2, "Hello from RustMFD!!");
+        sketchpad.Rectangle (W/4, H/4, (3*W)/4, (3*H)/4);
     }
 }
 
