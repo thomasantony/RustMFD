@@ -23,9 +23,10 @@
 // MFD class implementation
 
 // Constructor
-MFDTemplate::MFDTemplate(DWORD w, DWORD h, VESSEL *vessel, MFDBridge *mfd_bridge)
-	: MFD2(w, h, vessel), rust_mfd_(*(mfd_bridge->mfd.into_raw()))
+MFDTemplate::MFDTemplate(DWORD w, DWORD h, VESSEL *vessel)
+	: MFD2(w, h, vessel), rust_mfd_(create_rust_mfd())
 {
+	RustMFD *a = create_rust_mfd();
 	font = oapiCreateFont (w/20, true, "Arial", FONT_NORMAL, 450);
 	// Add MFD initialisation here
 }
@@ -40,7 +41,7 @@ MFDTemplate::~MFDTemplate ()
 // Return button labels
 char *MFDTemplate::ButtonLabel (int bt)
 {
-	auto label = rust_mfd_.ButtonLabel(bt);
+	auto label = rust_mfd_->ButtonLabel(bt);
 	return (char*)label.data();
 }
 
@@ -58,28 +59,20 @@ int MFDTemplate::ButtonMenu (const MFDBUTTONMENU **menu) const
 }
 
 bool MFDTemplate::ConsumeButton(int bt, int event) { 
-	rust_mfd_.ConsumeButton(bt, event);
+	rust_mfd_->ConsumeButton(bt, event);
 	return true;
 }
 
 // Repaint the MFD
 bool MFDTemplate::Update (oapi::Sketchpad *skp)
 {
-	auto title = rust_mfd_.Title();
-	std::string s_title(title.data(), title.length());
-	Title (skp, s_title.c_str());
+	// auto title = rust_mfd_.Title();
+	// std::string s_title(title.data(), title.length());
 	// // Draws the MFD title
+	// Title (skp, s_title.c_str());
 
-	// skp->SetFont (font);
-	// skp->SetTextAlign (oapi::Sketchpad::CENTER, oapi::Sketchpad::BASELINE);
-	// skp->SetTextColor (0x00FFFF);
-	// skp->Text (W/2, H/2,"Display area", 12);
-	// skp->Rectangle (W/4, H/4, (3*W)/4, (3*H)/4);
-
-	// // Add MFD display routines here.
-	// // Use the device context (hDC) for Windows GDI paint functions.
 	OapiSketchpad sketchpad(skp);
-	rust_mfd_.Update(sketchpad, W, H);
+	rust_mfd_->Update(sketchpad, W, H);
 	return true;
 }
 

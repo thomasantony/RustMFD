@@ -331,13 +331,15 @@ struct OapiSketchpad
 };
 #include "src/lib.rs.h"
 
-void InitModuleSpec(rust::Str name, unsigned int key, rust::Box<MFDBridge> mfd_bridge);
+extern "C" RustMFD *create_rust_mfd() noexcept;
+
+void InitModuleSpec(rust::Str name, unsigned int key);
 void ExitModuleSpec();
 
 class MFDTemplate : public MFD2
 {
 public:
-	MFDTemplate(DWORD w, DWORD h, VESSEL *vessel, MFDBridge* mfd_bridge);
+	MFDTemplate(DWORD w, DWORD h, VESSEL *vessel);
 	~MFDTemplate();
 	char *ButtonLabel(int bt);
 	int ButtonMenu(const MFDBUTTONMENU **menu) const;
@@ -346,5 +348,5 @@ public:
 
 protected:
 	oapi::Font *font;
-	RustMFD& rust_mfd_;
+	RustMFD* rust_mfd_;
 };

@@ -2,9 +2,6 @@ pub mod oapi_consts;
 
 #[cxx::bridge]
 mod ffi {
-    struct MFDBridge {
-        mfd: Box<RustMFD>
-    }
     extern "C" {
         include!("src/wrapper.h");
 
@@ -20,8 +17,7 @@ mod ffi {
         fn Rectangle(self: &mut OapiSketchpad, x0: i32, y0: i32, x1: i32, y1: i32);
 
         fn debugLog(line: &str);
-        fn InitModuleSpec(name: &str, key: u32, mfd_bridge: Box<MFDBridge>);
-        // fn InitModuleSpec(name: &str, key: u32);
+        fn InitModuleSpec(name: &str, key: u32);
         fn ExitModuleSpec();
     }
     extern "Rust" {
@@ -33,6 +29,10 @@ mod ffi {
     }
 }
 
+#[no_mangle]
+extern "C" fn create_rust_mfd() -> *mut RustMFD {
+    Box::into_raw(Box::new(RustMFD{counter: 0}))
+}
 pub struct RustMFD {
     counter: i32
 }
@@ -77,10 +77,7 @@ impl RustMFD {
 pub extern fn InitModule (_h_dll: ffi::HINSTANCE)
 {
     ffi::debugLog("Initializing RustMFD...");
-    let mfd_bridge = ffi::MFDBridge{
-        mfd: Box::new(RustMFD{counter: 0})
-    };
-    ffi::InitModuleSpec("RustMFD", oapi_consts::OAPI_KEY_T, Box::new(mfd_bridge));
+    ffi::InitModuleSpec("RustMFD", oapi_consts::OAPI_KEY_T);
 }
 #[no_mangle]
 pub extern fn ExitModule (_h_dll: ffi::HINSTANCE)
