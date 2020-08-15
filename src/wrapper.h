@@ -341,6 +341,7 @@ public:
 	~MFDTemplate();
 	char *ButtonLabel(int bt);
 	int ButtonMenu(const MFDBUTTONMENU **menu) const;
+	bool ConsumeButton(int bt, int event);
 	bool Update(oapi::Sketchpad *skp);
 
 protected:

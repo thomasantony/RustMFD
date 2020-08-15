@@ -1,11 +1,13 @@
 #include "wrapper.h"
 #include <memory>
+#include <cstring>
 
 using std::unique_ptr;
 
 void debugLog(rust::Str s)
 {
-    sprintf(oapiDebugString(), s.data());
+    std::string _s(s.data(), s.length());
+    sprintf(oapiDebugString(), _s.c_str());
 }
 
 static int g_MFDmode; // identifier for new MFD mode
@@ -31,7 +33,7 @@ int MsgProc(UINT msg, UINT mfd, WPARAM wparam, LPARAM lparam)
 void InitModuleSpec(rust::Str name, unsigned int key, rust::Box<MFDBridge> mfd_bridge)
 {
     g_mfd_bridge = mfd_bridge.into_raw();
-    strcpy_s(mfdName, name.data());
+    std::strncpy(mfdName, name.data(), name.length());
     mfdName[name.length()] = '\0';
     MFDMODESPECEX spec;
     spec.name = mfdName;

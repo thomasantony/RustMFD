@@ -60,6 +60,7 @@ mod ffi {
         type RustMFD;
         fn Update(self: &RustMFD, sketchpad: &mut OapiSketchpad, W: u32, H: u32);
         fn ButtonLabel(self: &RustMFD, btn: i32) -> &str;
+        fn ConsumeButton(self: &RustMFD, bt: i32, event: i32);
     }
 }
 
@@ -89,6 +90,10 @@ impl RustMFD {
         sketchpad.SetTextColor (0x00FFFF);
         sketchpad.Text(W/2-20, H/2, "Hello from RustMFD!!");
         sketchpad.Rectangle (W/4, H/4, (3*W)/4, (3*H)/4);
+    }
+    pub fn ConsumeButton(&self, bt: i32, event: i32)
+    {
+        ffi::debugLog(& format!("Pressed button {}", bt));
     }
 }
 

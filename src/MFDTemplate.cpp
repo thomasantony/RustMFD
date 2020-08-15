@@ -47,6 +47,7 @@ char *MFDTemplate::ButtonLabel (int bt)
 	// return (bt < 2 ? label[bt] : 0);
 }
 
+
 // Return button menus
 int MFDTemplate::ButtonMenu (const MFDBUTTONMENU **menu) const
 {
@@ -59,6 +60,10 @@ int MFDTemplate::ButtonMenu (const MFDBUTTONMENU **menu) const
 	return 2; // return the number of buttons used
 }
 
+bool MFDTemplate::ConsumeButton(int bt, int event) { 
+	rust_mfd_.ConsumeButton(bt, event);
+	return true;
+}
 
 // Repaint the MFD
 bool MFDTemplate::Update (oapi::Sketchpad *skp)
