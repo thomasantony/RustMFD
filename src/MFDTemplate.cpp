@@ -44,17 +44,34 @@ char *MFDTemplate::ButtonLabel (int bt)
 	return (char*)label.data();
 }
 
+static MFDBUTTONMENU buttonMenuArray[12];
+static std::string menuButtonLine1Array[12];
+static std::string menuButtonLine2Array[12];
 
 // Return button menus
 int MFDTemplate::ButtonMenu (const MFDBUTTONMENU **menu) const
 {
-	// The menu descriptions for the two buttons
-	static const MFDBUTTONMENU mnu[2] = {
-		{"Move up", 0, '['},
-		{"Move down", 0, ']'}
-	};
-	if (menu) *menu = mnu;
-	return 2; // return the number of buttons used
+	memset(buttonMenuArray, 0, sizeof(buttonMenuArray));
+	auto num_buttons = 0;
+	for (auto i = 0; i < 12; i++)
+	{
+		auto menu_item = rust_mfd_.ButtonMenu(i);
+		if (menu_item.selchar == 0)
+		{
+			num_buttons = i+1;
+			break;
+		}
+		auto& line1 = menu_item.line1;
+		auto& line2 = menu_item.line2;
+		menuButtonLine1Array[i] = std::string(line1.data(), line1.length());
+		menuButtonLine2Array[i] = std::string(line2.data(), line2.length());
+		buttonMenuArray[i].line1 = line1.length() == 0 ? 0 : menuButtonLine1Array[i].c_str();
+		buttonMenuArray[i].line2 = line2.length() == 0 ? 0 : menuButtonLine2Array[i].c_str();
+		buttonMenuArray[i].selchar = (char)menu_item.selchar;
+	}
+
+	if (menu) *menu = buttonMenuArray;
+	return num_buttons; // return the number of buttons used
 }
 
 bool MFDTemplate::ConsumeButton(int bt, int event) { 

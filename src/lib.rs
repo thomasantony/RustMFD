@@ -2,6 +2,11 @@ pub mod oapi_consts;
 
 #[cxx::bridge]
 mod ffi {
+    struct MFDButtonMenu {
+        line1: String,
+        line2: String,
+        selchar: u8
+    }
     extern "C" {
         include!("src/wrapper.h");
 
@@ -25,7 +30,8 @@ mod ffi {
         fn Title(self: &RustMFD) -> &str;
         fn Update(self: &RustMFD, sketchpad: &mut OapiSketchpad, W: u32, H: u32);
         fn ButtonLabel(self: &RustMFD, btn: i32) -> &str;
-        fn ConsumeButton(self: &mut RustMFD, bt: i32, event: i32);
+        fn ConsumeButton(self: &mut RustMFD, btn: i32, event: i32);
+        fn ButtonMenu(self: &RustMFD, btn: u32) -> MFDButtonMenu;
     }
 }
 
@@ -40,6 +46,27 @@ impl RustMFD {
     pub fn Title(&self) -> &str
     {
         "Counter MFD written in Rust"
+    }
+    pub fn ButtonMenu(&self, btn: u32) -> ffi::MFDButtonMenu
+    {
+        match btn
+        {
+            0 => ffi::MFDButtonMenu{
+                line1:"Increment counter".into(),
+                line2: "".into(),
+                selchar: 0x55, // 'U'
+                },
+            1 => ffi::MFDButtonMenu{
+                line1:"Decrement counter".into(),
+                line2: "".into(),
+                selchar: 0x44, // 'D'
+                },
+            _ => ffi::MFDButtonMenu{
+                line1:"".into(),
+                line2: "".into(),
+                selchar: 0
+            }
+        }
     }
     pub fn ButtonLabel(&self, btn: i32) -> &str
     {
@@ -58,8 +85,8 @@ impl RustMFD {
         let W = W as i32;
         // let a: oapi_sketchpad::TAlign_horizontal;
         sketchpad.SetTextColor (0x00FFFF);
-        sketchpad.Text(W/2-30, H/2, "Hello from RustMFD!!");
-        sketchpad.Text(W/2-30, H/2+15, & format!("Counter: {}", self.counter));
+        sketchpad.Text(W/4+5, H/4+5, "Hello from RustMFD!!");
+        sketchpad.Text(W/4+5, H/4+5+15, & format!("Counter: {}", self.counter));
         sketchpad.Rectangle (W/4, H/4, (3*W)/4, (3*H)/4);
     }
     pub fn ConsumeButton(&mut self, bt: i32, event: i32)
