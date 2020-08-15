@@ -1,18 +1,15 @@
 #pragma once
 #include "rust/cxx.h"
-
 #include "orbitersdk.h"
 #include <cstdint>
 
-void debugLog(rust::Str);
-void InitModuleSpec(rust::Str name, unsigned int key);
-void ExitModuleSpec();
-
-using oapi::Font;
-using oapi::Pen;
 using oapi::Brush;
+using oapi::Font;
 using oapi::IVECTOR2;
+using oapi::Pen;
 using std::unique_ptr;
+
+void debugLog(rust::Str);
 
 static int MsgProc(UINT msg, UINT mfd, WPARAM wparam, LPARAM lparam);
 
@@ -331,4 +328,22 @@ struct OapiSketchpad
 	 *   sketchpad implementation.
 	 */
      HDC GetDC() { return pad_->GetDC(); }
+};
+#include "src/lib.rs.h"
+
+void InitModuleSpec(rust::Str name, unsigned int key, rust::Box<MFDBridge> mfd_bridge);
+void ExitModuleSpec();
+
+class MFDTemplate : public MFD2
+{
+public:
+	MFDTemplate(DWORD w, DWORD h, VESSEL *vessel, MFDBridge* mfd_bridge);
+	~MFDTemplate();
+	char *ButtonLabel(int bt);
+	int ButtonMenu(const MFDBUTTONMENU **menu) const;
+	bool Update(oapi::Sketchpad *skp);
+
+protected:
+	oapi::Font *font;
+	RustMFD& rust_mfd_;
 };

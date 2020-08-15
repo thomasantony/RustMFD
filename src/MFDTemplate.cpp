@@ -15,16 +15,16 @@
 #define STRICT
 #define ORBITER_MODULE
 #include "windows.h"
-#include "src/lib.rs.h"
 #include "orbitersdk.h"
-#include "MFDTemplate.h"
+
+#include "wrapper.h"
 
 // ==============================================================
 // MFD class implementation
 
 // Constructor
-MFDTemplate::MFDTemplate (DWORD w, DWORD h, VESSEL *vessel)
-: MFD2 (w, h, vessel)
+MFDTemplate::MFDTemplate(DWORD w, DWORD h, VESSEL *vessel, MFDBridge *mfd_bridge)
+	: MFD2(w, h, vessel), rust_mfd_(*(mfd_bridge->mfd.into_raw()))
 {
 	font = oapiCreateFont (w/20, true, "Arial", FONT_NORMAL, 450);
 	// Add MFD initialisation here
@@ -73,7 +73,7 @@ bool MFDTemplate::Update (oapi::Sketchpad *skp)
 	// // Add MFD display routines here.
 	// // Use the device context (hDC) for Windows GDI paint functions.
 	OapiSketchpad sketchpad(skp);
-	UpdateMFD(sketchpad, W, H);
+	rust_mfd_.Update(sketchpad, W, H);
 	return true;
 }
 
