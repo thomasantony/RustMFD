@@ -154,7 +154,7 @@ struct OapiSketchpad
 	 * \return \e true on success, \e false on failure.
 	 * \default None, returns false.
 	 */
-     bool Text(int x, int y, rust::Str str, int len) { return pad_->Text(x, y, str.data(), len); }
+     bool Text(int x, int y, rust::Str str) { return pad_->Text(x, y, str.data(), str.length()); }
 
      /**
 	 * \brief Draw a text string into a rectangle.

@@ -14,6 +14,7 @@ typedef int(*msgproc)(UINT, UINT, WPARAM, LPARAM);
 void InitModuleSpec(rust::Str name, unsigned int key)
 {
     strcpy_s(mfdName, name.data());
+    mfdName[name.length()] = '\0';
     MFDMODESPECEX spec;
     spec.name = mfdName;
     spec.key = OAPI_KEY_T;                // MFD mode selection key

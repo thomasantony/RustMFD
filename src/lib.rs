@@ -32,7 +32,7 @@ mod ffi {
         fn SetFont(self: &OapiSketchpad, font: UniquePtr<Font>);
         fn SetTextColor(self: &mut OapiSketchpad, color: u32) -> u32;
         // fn SetTextAlign(self: &mut OapiSketchpad, tah: TAlign_horizontal, tav: TAlign_vertical);
-        fn Text(self: &mut OapiSketchpad, x: i32, y: i32, str: &str, len: i32) -> bool;
+        fn Text(self: &mut OapiSketchpad, x: i32, y: i32, str: &str) -> bool;
         fn Rectangle(self: &mut OapiSketchpad, x0: i32, y0: i32, x1: i32, y1: i32);
 
         fn debugLog(line: &str);
@@ -49,14 +49,14 @@ fn UpdateMFD(sketchpad: &mut ffi::OapiSketchpad, W: u32, H: u32)
     let H = H as i32;
     let W = W as i32;
     // let a: oapi_sketchpad::TAlign_horizontal;
-    sketchpad.Text(W/2, H/2, "Hello Rust", 12);
+    sketchpad.Text(W/2, H/2, "Hello from Rust!!");
 
 }
 #[no_mangle]
 pub extern fn InitModule (_h_dll: ffi::HINSTANCE)
 {
     ffi::debugLog("Initializing RustMFD...");
-    ffi::InitModuleSpec("Rust MFD", oapi_consts::OAPI_KEY_T, );
+    ffi::InitModuleSpec("RustMFD", oapi_consts::OAPI_KEY_T, );
 }
 #[no_mangle]
 pub extern fn ExitModule (_h_dll: ffi::HINSTANCE)

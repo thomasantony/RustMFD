@@ -20,32 +20,6 @@
 #include "MFDTemplate.h"
 
 // ==============================================================
-// Global variables
-
-int g_MFDmode; // identifier for new MFD mode
-
-// ==============================================================
-// API interface
-
-void InitModule (HINSTANCE hDLL)
-{
-	static char *name = "MFD Template";   // MFD mode name
-	MFDMODESPECEX spec;
-	spec.name = name;
-	spec.key = OAPI_KEY_T;                // MFD mode selection key
-	spec.context = NULL;
-	spec.msgproc = MFDTemplate::MsgProc;  // MFD mode callback function
-
-	// Register the new MFD mode with Orbiter
-	g_MFDmode = oapiRegisterMFDMode (spec);
-}
-void ExitModule (HINSTANCE hDLL)
-{
-	// Unregister the custom MFD mode when the module is unloaded
-	oapiUnregisterMFDMode (g_MFDmode);
-}
-
-// ==============================================================
 // MFD class implementation
 
 // Constructor
@@ -87,7 +61,7 @@ int MFDTemplate::ButtonMenu (const MFDBUTTONMENU **menu) const
 // Repaint the MFD
 bool MFDTemplate::Update (oapi::Sketchpad *skp)
 {
-	Title (skp, "MFD Template");
+	Title (skp, "MFD Template in Rust");
 	// // Draws the MFD title
 
 	// skp->SetFont (font);
