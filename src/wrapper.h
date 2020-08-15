@@ -14,6 +14,8 @@ using oapi::Brush;
 using oapi::IVECTOR2;
 using std::unique_ptr;
 
+static int MsgProc(UINT msg, UINT mfd, WPARAM wparam, LPARAM lparam);
+
 struct OapiSketchpad
 {
     oapi::Sketchpad* pad_;
