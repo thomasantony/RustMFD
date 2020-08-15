@@ -1,37 +1,5 @@
 pub mod oapi_consts;
 
-// #[cxx::bridge(namespace = oapi)]
-// mod oapi {
-//     extern "C"
-//     {
-//         include!("Orbitersdk.h");
-//         type Sketchpad;
-        
-//         // fn SetTextColor(self:&mut Sketchpad, color: DWORD) -> u32;
-//     }
-// }
-// #[cxx::bridge(namespace = oapi::Sketchpad)]
-// mod oapi_sketchpad {
-//     extern "C"
-//     {
-//         include!("Orbitersdk.h");
-//         type TAlign_horizontal;
-//     }
-// }
-
-struct MFDImpl {
-
-}
-
-impl MFDImpl {
-    pub fn Update(&self, sketchpad: &mut ffi::OapiSketchpad, W: u32, H: u32)
-    {
-        let H = H as i32;
-        let W = W as i32;
-        // let a: oapi_sketchpad::TAlign_horizontal;
-        sketchpad.Text(W/2, H/2, "Hello from Rust!!");
-    }
-}
 #[cxx::bridge]
 mod ffi {
     struct MFDBridge {
